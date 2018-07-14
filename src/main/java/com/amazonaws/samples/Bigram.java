@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
-
+//TODO: all of this class
 public class Bigram implements WritableComparable<Bigram> {
 
     protected Text first;

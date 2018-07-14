@@ -14,7 +14,8 @@ import java.util.StringTokenizer;
 // and calculating C(w1,w2) for each pair by decade.
 
 public class FirstMapReduce {
-
+	//TODO: reducer class is good?
+	
 	public FirstMapReduce() {}
 
 	public static class FirstMapReduceMapper extends Mapper<LongWritable, Text, Bigram, LongWritable> {
@@ -84,7 +85,7 @@ public class FirstMapReduce {
 			Text ans =new Text(String.valueOf(decade));
 			return ans;
 		}
-
+	}
 
 		public static class FirstMapReduceReducer extends Reducer<Bigram,LongWritable,Bigram,LongWritable> {
 			@Override
@@ -97,6 +98,6 @@ public class FirstMapReduce {
 			}
 		}
 	
-	}
+	
 }
 

@@ -12,6 +12,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import mapReduces.FourthMapReduce;
 import mapReduces.ThirdMapReduce;
 
+//TODO: change this class 
 public class ExtractCollaction {
 
     private static final String FIRST_OUTPUT = "s3n://ass2talstas/first_output";
@@ -98,8 +99,8 @@ public class ExtractCollaction {
                     if (waitForJobComletion) {
                         waitForJobComletion = setAndRunMapReduceJob("FifthMapReduce", conf, com.amazonaws.samples.ExtractCollaction.class,
                                 mapReduces.FifthMapReduce.FifthMapReduceMapper.class, mapReduces.FifthMapReduce.FifthMapReduceReducer.class,
-                                com.amazonaws.samples.CalculatedBigram.class, Text.class,
-                                com.amazonaws.samples.CalculatedBigram.class, Text.class,
+                                com.amazonaws.samples.BigramFinal.class, Text.class,
+                                com.amazonaws.samples.BigramFinal.class, Text.class,
                                 FOURTH_OUTPUT, FINAL_OUTPUT,false,mapReduces.FifthMapReduce.FifthMapReducePartitioner.class);
                         if (waitForJobComletion) {
                             System.out.println("ExtractCollaction :: Done running all map reduces successfully!");
