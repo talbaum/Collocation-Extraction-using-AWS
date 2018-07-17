@@ -5,12 +5,8 @@ import org.apache.hadoop.io.Text;
 public class BigramFinal extends Bigram  {
 
 
-    public BigramFinal(Text first, Text second, Text decade , Text npmi) {
-        super(first,second,decade,npmi);
-    }
-
-    public BigramFinal(Text first, Text second, Text decade) {
-        super(first,second,decade,new Text(""));
+    public BigramFinal(Text first, Text second, Text decade ) {
+        super(first,second,decade);
     }
 
     public BigramFinal() {
@@ -19,7 +15,7 @@ public class BigramFinal extends Bigram  {
 
     @Override
     public String toString() {
-        return first + " " + second + " " + decade + " " + super.npmi;
+        return first + " " + second + " " + decade + " " ;
     }
 
     @Override
@@ -29,11 +25,6 @@ public class BigramFinal extends Bigram  {
         } else if(decade.compareTo(tp.getDecade()) < 0) {
             return -1;
         } else {
-                if(npmi.compareTo(tp.getNpmi()) < 0) {
-                    return 1;
-                } else if(npmi.compareTo(tp.getNpmi()) > 0) {
-                    return -1;
-                } else {
                     if(first.compareTo(tp.getFirst()) < 0) {
                         return 1;
                     } else if(first.compareTo(tp.getFirst()) > 0) {
@@ -50,5 +41,5 @@ public class BigramFinal extends Bigram  {
                 }
         }
     }
-}
+
 

@@ -6,13 +6,19 @@ import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduce;
 import com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClientBuilder;
 import com.amazonaws.services.elasticmapreduce.model.*;
-
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 
 public class mainE {
 	public static void main(String[]args){
+		
+		  AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
+				new EnvironmentVariableCredentialsProvider().getCredentials());	
+		
+		/*
+		//EC2 RUN:
 		AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
-				new EnvironmentVariableCredentialsProvider().getCredentials());		
-
+                new InstanceProfileCredentialsProvider(false).getCredentials());
+*/
 		System.out.println("creating a emr");
 		AmazonElasticMapReduce emr= AmazonElasticMapReduceClientBuilder.standard()
 				.withCredentials(credentials)
@@ -32,7 +38,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step1 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step1.jar")
-				.withArgs("FirstMapReduce",lang,ngramLink);
+				.withArgs("FirstMapReduce",ngramLink,lang);
 
 		StepConfig stepOne = new StepConfig()
 				.withName("FirstMapReduce")
@@ -43,7 +49,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step2 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step2.jar")
-				.withArgs("SecondMapReduce",lang,ngramLink);
+				.withArgs("SecondMapReduce",ngramLink,lang);
 
 		StepConfig stepTwo = new StepConfig()
 				.withName("SecondMapReduce")
@@ -54,7 +60,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step3 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step3.jar")
-				.withArgs("ThirdMapReduce",lang,ngramLink);
+				.withArgs("ThirdMapReduce",ngramLink,lang);
 
 		StepConfig stepThree = new StepConfig()
 				.withName("ThirdMapReduce")

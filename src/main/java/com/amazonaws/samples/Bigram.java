@@ -11,30 +11,17 @@ public class Bigram implements WritableComparable<Bigram> {
     protected Text first;
     protected Text second;
     protected Text decade;
-    protected Text npmi;
-
-    public Bigram(Text first, Text second, Text decade,Text npmi) {
-        set(first, second, decade,npmi);
-    }
 
     public Bigram(Text first, Text second, Text decade) {
-        set(first, second, decade,new Text(""));
+        set(first, second, decade);
     }
 
     public Bigram() {
-        set(new Text(), new Text(), new Text(),new Text());
+        set(new Text(), new Text(), new Text());
     }
 
     public Text getDecade() {
         return decade;
-    }
-
-    public Text getNpmi() {
-        return npmi;
-    }
-
-    public void setNpmi(Text npmi) {
-        this.npmi = npmi;
     }
 
     public void setDecade(Text decade) {
@@ -49,11 +36,10 @@ public class Bigram implements WritableComparable<Bigram> {
         return second;
     }
 
-    public void set(Text first, Text second, Text decade,Text npmi) {
+    public void set(Text first, Text second, Text decade) {
         this.first = first;
         this.second = second;
         this.decade = decade;
-        this.npmi = npmi;
     }
 
     public Text toText() {
@@ -65,7 +51,6 @@ public class Bigram implements WritableComparable<Bigram> {
         first.readFields(in);
         second.readFields(in);
         decade.readFields(in);
-        npmi.readFields(in);
     }
 
     @Override
@@ -73,7 +58,6 @@ public class Bigram implements WritableComparable<Bigram> {
         first.write(out);
         second.write(out);
         decade.write(out);
-        npmi.write(out);
     }
 
     @Override
@@ -109,7 +93,6 @@ public class Bigram implements WritableComparable<Bigram> {
                 int result = first != null ? first.hashCode() : 0;
                 result = 31 * result + (second != null ? second.hashCode() : 0);
                 result = 31 * result + (decade != null ? decade.hashCode() : 0);
-                result = 31 * result + (npmi != null ? npmi.hashCode() : 0);
                 return result;
     }
 
