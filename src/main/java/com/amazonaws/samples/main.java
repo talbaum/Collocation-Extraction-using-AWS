@@ -29,19 +29,17 @@ public class main {
 		String[] stopWords=getStopWords(args[0]);
 		for( String w : stopWords)
 			System.out.println(w);
-	}
-		/*
+		
 		AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
 				new EnvironmentVariableCredentialsProvider().getCredentials());
 		AmazonElasticMapReduce mapReduce = new AmazonElasticMapReduceClient(credentials);
 		 
 		HadoopJarStepConfig hadoopJarStep = new HadoopJarStepConfig()
-		    .withJar("s3n://yourbucket/yourfile.jar") // This should be a full map reduce application.
-		    .withMainClass("some.pack.MainClass")
-		    .withArgs("s3n://yourbucket/input/", "s3n://yourbucket/output/");
+		    .withJar("s3n://ass2talstas/Extract.jar") // This should be a full map reduce application.
+		    .withArgs(args[0], args[1]);
 		 
 		StepConfig stepConfig = new StepConfig()
-		    .withName("stepname")
+		    .withName("ExtractCollaction")
 		    .withHadoopJarStep(hadoopJarStep)
 		    .withActionOnFailure("TERMINATE_JOB_FLOW");
 		 
@@ -49,7 +47,7 @@ public class main {
 		    .withInstanceCount(2)
 		    .withMasterInstanceType(InstanceType.M1Small.toString())
 		    .withSlaveInstanceType(InstanceType.M1Small.toString())
-		    .withHadoopVersion("2.6.0").withEc2KeyName("yourkey")
+		    .withHadoopVersion("2.6.0").withEc2KeyName("Talbaum1")
 		    .withKeepJobFlowAliveWhenNoSteps(false)
 		    .withPlacement(new PlacementType("us-east-1a"));
 		 
@@ -65,7 +63,7 @@ public class main {
 
 	}
 
-	*/
+
 
 		private static String[] getStopWords(String lang) {
 			if(lang.equals("eng")) {
