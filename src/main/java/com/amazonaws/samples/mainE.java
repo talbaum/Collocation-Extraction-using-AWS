@@ -96,8 +96,8 @@ public class mainE {
 		 */
 		JobFlowInstancesConfig instances = new JobFlowInstancesConfig()
 			    .withInstanceCount(2)
-			    .withMasterInstanceType(InstanceType.M1Small.toString())
-			    .withSlaveInstanceType(InstanceType.M1Small.toString())
+			    .withMasterInstanceType(InstanceType.M3Xlarge.toString())
+				.withSlaveInstanceType(InstanceType.M3Xlarge.toString())
 			    .withHadoopVersion("2.6.0").withEc2KeyName("Talbaum1")
 			    .withKeepJobFlowAliveWhenNoSteps(false)
 				.withPlacement(new PlacementType("us-east-1a"));

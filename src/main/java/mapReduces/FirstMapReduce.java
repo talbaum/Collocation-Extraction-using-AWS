@@ -9,6 +9,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import java.io.IOException;
 import java.util.StringTokenizer;
+import org.apache.hadoop.conf.Configuration;
 
 // This map reduce is filtering stop words (eng/heb),
 // and calculating C(w1,w2) for each pair by decade.
@@ -97,7 +98,12 @@ public class FirstMapReduce {
 				context.write(key, new LongWritable(sum));
 			}
 		}
+		public static void main(String[] args) throws Exception, ClassNotFoundException, InterruptedException  {
+			Configuration conf = new Configuration();
+			
+			
+		}
+	}
 	
-	
-}
+
 
