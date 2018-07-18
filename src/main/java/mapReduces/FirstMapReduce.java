@@ -114,7 +114,7 @@ public static void main(String[] args) throws Exception, ClassNotFoundException,
       myJob.setMapOutputValueClass(LongWritable.class);
      
 	SequenceFileInputFormat.addInputPath(myJob, new Path(args[1]));
-	String output="/output1/";
+	String output=args[3];
 	FileOutputFormat.setOutputPath(myJob, new Path(output));
 	myJob.waitForCompletion(true);	
 }

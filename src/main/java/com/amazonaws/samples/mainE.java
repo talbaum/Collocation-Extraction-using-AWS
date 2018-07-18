@@ -9,6 +9,11 @@ import com.amazonaws.services.elasticmapreduce.model.*;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 
 public class mainE {
+	  private static final String FIRST_OUTPUT = "s3n://ass2talstas//first_output";
+	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//second_output";
+	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//third_output";
+	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//fourth_output";
+	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//final_output";
 	public static void main(String[]args){
 		
 		  AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
@@ -29,7 +34,7 @@ public class mainE {
 		String lang=args[0];
 		String ngramLink;
 		if(lang.equals("eng"))
-			ngramLink="s3://datasets.elasticmapreduce/ngrams/books/20090715/eng-us-all/2gram/data";
+			ngramLink="s3://ass2talstas/eng.corp.10k";
 		else
 			ngramLink= "s3://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/2gram/data";
 			 			
@@ -38,7 +43,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step1 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step1.jar")
-				.withArgs("FirstMapReduce",ngramLink,lang);
+				.withArgs("FirstMapReduce",ngramLink,lang,FIRST_OUTPUT);
 
 		StepConfig stepOne = new StepConfig()
 				.withName("FirstMapReduce")
@@ -49,7 +54,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step2 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step2.jar")
-				.withArgs("SecondMapReduce",ngramLink,lang);
+				.withArgs("SecondMapReduce",FIRST_OUTPUT,SECOND_OUTPUT);
 
 		StepConfig stepTwo = new StepConfig()
 				.withName("SecondMapReduce")
@@ -112,7 +117,7 @@ public class mainE {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepOne)
+				.withSteps(stepOne,stepTwo)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")
