@@ -8,6 +8,7 @@ import mapReduces.FirstMapReduce.FirstMapReduceReducer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -68,21 +69,21 @@ public class SecondMapReduce {
          @Override
          public void reduce(Bigram key, Iterable<LongWritable> values, Context context) throws IOException,  InterruptedException {
              if(!key.getFirst().equals(currentFirstWord)) {
-                     currentFirstWord = key.getFirst();
-                     firstWordCounter = 0;
-                    // long sum = 0;
+	            	 currentFirstWord = key.getFirst();
+	            	 firstWordCounter = 0;
+	            	 long sum = 0;
                      for (LongWritable value : values) {
-                    	 firstWordCounter += value.get();
+                    	 sum += value.get();
                      }
-                     //firstWordCounter += sum;
+                     firstWordCounter += sum;
              } else {
                      if (key.getSecond().toString().equals("*")) {
                          firstWordCounter = 0;
-                         //long sum = 0;
+                         long sum = 0;
                          for (LongWritable value : values) {
-                        	 firstWordCounter += value.get();
+                        	 sum += value.get();
                          }
-                        // firstWordCounter += sum;
+                         firstWordCounter += sum;
                      } else {
                          Text Cw1w2 = new Text(values.iterator().next().toString());
                          Text Cw1 = new Text(String.valueOf(firstWordCounter));
@@ -98,17 +99,16 @@ public class SecondMapReduce {
     	Job myJob = new Job(conf, "step2");
     	myJob.setJarByClass(SecondMapReduce.class);
     	myJob.setMapperClass(SecondMapReduceMapper.class);
-    	myJob.setCombinerClass(SecondMapReduceReducer.class);
+    	//myJob.setCombinerClass(SecondMapReduceReducer.class);
     	myJob.setReducerClass(SecondMapReduceReducer.class);
     	myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class);
-    	myJob.setOutputValueClass(LongWritable.class);
+    	myJob.setOutputValueClass(IntWritable.class);
     	//myJob.setOutputFormatClass(TextOutputFormat.class);
-    	
+    	myJob.setMapOutputKeyClass(com.amazonaws.samples.Bigram.class);
+    	myJob.setMapOutputValueClass(LongWritable.class);
+    	myJob.setPartitionerClass(SecondMapReducePartitioner.class);
 
-    	  myJob.setMapOutputKeyClass(com.amazonaws.samples.Bigram.class);
-          myJob.setMapOutputValueClass(LongWritable.class);
-         
-          TextInputFormat.addInputPath(myJob, new Path(args[1]));
+    	TextInputFormat.addInputPath(myJob, new Path(args[1]));
     	String output=args[2];
     	TextOutputFormat.setOutputPath(myJob, new Path(output));
     	myJob.waitForCompletion(true);	

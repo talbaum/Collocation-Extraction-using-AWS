@@ -65,7 +65,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step3 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step3.jar")
-				.withArgs("ThirdMapReduce",ngramLink,lang);
+				.withArgs("ThirdMapReduce",SECOND_OUTPUT,THIRD_OUTPUT);
 
 		StepConfig stepThree = new StepConfig()
 				.withName("ThirdMapReduce")
@@ -76,7 +76,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step4 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step4.jar")
-				.withArgs("FourthMapReduce");
+				.withArgs("FourthMapReduce",THIRD_OUTPUT,FOURTH_OUTPUT);
 
 		StepConfig stepFour = new StepConfig()
 				.withName("FourthMapReduce")
@@ -117,7 +117,7 @@ public class mainE {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepOne,stepTwo)
+				.withSteps(stepOne,stepTwo,stepThree,stepFour)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")

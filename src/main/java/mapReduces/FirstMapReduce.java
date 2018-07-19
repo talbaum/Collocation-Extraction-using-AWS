@@ -105,8 +105,8 @@ public static void main(String[] args) throws Exception, ClassNotFoundException,
 	myJob.setMapperClass(FirstMapReduceMapper.class);
 	myJob.setCombinerClass(FirstMapReduceReducer.class);
 	myJob.setReducerClass(FirstMapReduceReducer.class);
-	myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class);
-	myJob.setOutputValueClass(LongWritable.class);
+	myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class); //פה נראה לי הבעיה שים לב שהוא מגדיר את החרא הזה רק אם זה לא הראשון
+	myJob.setOutputValueClass(LongWritable.class); //we know it bigran
 	myJob.setOutputFormatClass(TextOutputFormat.class);
 	myJob.setInputFormatClass(SequenceFileInputFormat.class);
 
@@ -115,7 +115,7 @@ public static void main(String[] args) throws Exception, ClassNotFoundException,
      
 	SequenceFileInputFormat.addInputPath(myJob, new Path(args[1]));
 	String output=args[3];
-	FileOutputFormat.setOutputPath(myJob, new Path(output));
+	TextOutputFormat.setOutputPath(myJob, new Path(output));
 	myJob.waitForCompletion(true);	
 }
 }
