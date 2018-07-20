@@ -117,7 +117,7 @@ public class mainE {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepOne,stepTwo,stepThree,stepFour,stepFive)
+				.withSteps(stepFive)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")

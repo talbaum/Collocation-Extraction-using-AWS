@@ -27,10 +27,12 @@ public class FirstMapReduce {
 		public FirstMapReduceMapper() {
 		}
 
+		/*
 		protected void setup(Context context) throws IOException, InterruptedException {
-			//isStopWordsIncluded = Integer.parseInt(context.getConfiguration().get("isStopWordsIncluded")) == 1? true : false;
+			isStopWordsIncluded = Integer.parseInt(context.getConfiguration().get("isStopWordsIncluded")) == 1? true : false;
 		}
-
+		*/
+		
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString());
@@ -105,8 +107,8 @@ public static void main(String[] args) throws Exception, ClassNotFoundException,
 	myJob.setMapperClass(FirstMapReduceMapper.class);
 	myJob.setCombinerClass(FirstMapReduceReducer.class);
 	myJob.setReducerClass(FirstMapReduceReducer.class);
-	myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class); //פה נראה לי הבעיה שים לב שהוא מגדיר את החרא הזה רק אם זה לא הראשון
-	myJob.setOutputValueClass(LongWritable.class); //we know it bigran
+	myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class); 
+	myJob.setOutputValueClass(LongWritable.class);
 	myJob.setOutputFormatClass(TextOutputFormat.class);
 	myJob.setInputFormatClass(SequenceFileInputFormat.class);
 
