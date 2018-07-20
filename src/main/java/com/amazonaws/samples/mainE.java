@@ -87,7 +87,7 @@ public class mainE {
 		 */
 		HadoopJarStepConfig step5 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step5.jar")
-				.withArgs("FifthMapReduce");
+				.withArgs("FifthMapReduce",FOURTH_OUTPUT,FINAL_OUTPUT);
 
 		StepConfig stepFive = new StepConfig()
 				.withName("FifthMapReduce")
@@ -117,7 +117,7 @@ public class mainE {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepOne,stepTwo,stepThree,stepFour)
+				.withSteps(stepOne,stepTwo,stepThree,stepFour,stepFive)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")

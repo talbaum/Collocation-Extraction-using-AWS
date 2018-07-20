@@ -11,13 +11,27 @@ public class Bigram implements WritableComparable<Bigram> {
     protected Text first;
     protected Text second;
     protected Text decade;
+    protected Text likehood;
 
+    public Bigram(Text first, Text second, Text decade , Text likehood) {
+    	this.first = first;
+        this.second = second;
+        this.decade = decade;
+        this.likehood = likehood;
+    }
+    
     public Bigram(Text first, Text second, Text decade) {
-        set(first, second, decade);
+    	this.first = first;
+        this.second = second;
+        this.decade = decade;
+        this.likehood = new Text("");
     }
 
     public Bigram() {
-        set(new Text(), new Text(), new Text());
+        this.first = new Text();
+        this.second = new Text();
+        this.decade = new Text();
+        this.likehood = new Text();
     }
 
     public Text getDecade() {
@@ -35,13 +49,15 @@ public class Bigram implements WritableComparable<Bigram> {
     public Text getSecond() {
         return second;
     }
-
-    public void set(Text first, Text second, Text decade) {
-        this.first = first;
-        this.second = second;
-        this.decade = decade;
+    
+    public Text getLikehood() {
+    	return likehood;
     }
-
+    
+    public void setLikehood(Text likehood) {
+        this.likehood = likehood;
+    }
+    
     public Text toText() {
         return new Text(this.toString());
     }
@@ -51,6 +67,7 @@ public class Bigram implements WritableComparable<Bigram> {
         first.readFields(in);
         second.readFields(in);
         decade.readFields(in);
+        likehood.readFields(in);
     }
 
     @Override
@@ -58,11 +75,12 @@ public class Bigram implements WritableComparable<Bigram> {
         first.write(out);
         second.write(out);
         decade.write(out);
+        likehood.write(out);
     }
 
     @Override
     public String toString() {
-        return first + " " + second + " " + decade;
+        return first + " " + second + " " + decade + " "+likehood;
     }
 
     @Override
@@ -93,6 +111,7 @@ public class Bigram implements WritableComparable<Bigram> {
                 int result = first != null ? first.hashCode() : 0;
                 result = 31 * result + (second != null ? second.hashCode() : 0);
                 result = 31 * result + (decade != null ? decade.hashCode() : 0);
+                result = 31 * result + (likehood != null ? likehood.hashCode() : 0);
                 return result;
     }
 

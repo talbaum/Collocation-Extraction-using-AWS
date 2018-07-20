@@ -1,5 +1,7 @@
 package mapReduces;
-
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import com.amazonaws.samples.Bigram;
 
 import mapReduces.ThirdMapReduce.ThirdMapReduceMapper;
@@ -116,13 +118,11 @@ public class FourthMapReduce {
                     double fourth_element = log(L((C2-C12),(N1-C1),p2));
                     double likehood = first_element+second_element-third_element-fourth_element;
                     Text like = new Text(String.valueOf(likehood));
-                    context.write(new com.amazonaws.samples.Bigram(key.getFirst(),key.getSecond(),key.getDecade()),like);
-                    
+                    context.write(new com.amazonaws.samples.Bigram(key.getFirst(),key.getSecond(),key.getDecade()),like);              
                 }
-                
             }
-            
         }
+  
         public static void main(String[] args) throws Exception, ClassNotFoundException, InterruptedException  {
         	Configuration conf = new Configuration();
         	Job myJob = new Job(conf, "step4");
