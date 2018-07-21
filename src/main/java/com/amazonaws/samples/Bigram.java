@@ -7,7 +7,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 //TODO: all of this class
 public class Bigram implements WritableComparable<Bigram> {
-
     protected Text first;
     protected Text second;
     protected Text decade;
@@ -84,20 +83,20 @@ public class Bigram implements WritableComparable<Bigram> {
     }
 
     @Override
-    public int compareTo(Bigram tp) {
-        if(decade.compareTo(tp.getDecade()) > 0) {
+    public int compareTo(Bigram other) {
+        if(decade.compareTo(other.getDecade()) > 0) {
             return 1;
-        } else if(decade.compareTo(tp.getDecade()) < 0) {
+        } else if(decade.compareTo(other.getDecade()) < 0) {
             return -1;
         } else {
-            if(first.compareTo(tp.getFirst()) > 0) {
+            if(first.compareTo(other.getFirst()) > 0) {
                 return 1;
-            } else if(first.compareTo(tp.getFirst()) < 0) {
+            } else if(first.compareTo(other.getFirst()) < 0) {
                 return -1;
             } else {
-                if(second.compareTo(tp.getSecond()) > 0) {
+                if(second.compareTo(other.getSecond()) > 0) {
                     return 1;
-                } else if(second.compareTo(tp.getSecond()) < 0) {
+                } else if(second.compareTo(other.getSecond()) < 0) {
                     return -1;
                 } else {
                     return 0;

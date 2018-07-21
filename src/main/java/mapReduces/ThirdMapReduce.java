@@ -25,11 +25,11 @@ import java.lang.StringBuffer;
 
 public class ThirdMapReduce {
 	//TODO: all of this class
-    public ThirdMapReduce() {}
+    //public ThirdMapReduce() {}
 
     public static class ThirdMapReduceMapper extends Mapper<LongWritable, Text, Bigram, Text> {
 
-        public ThirdMapReduceMapper() {}
+        //public ThirdMapReduceMapper() {}
 
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
@@ -37,17 +37,17 @@ public class ThirdMapReduce {
               Text first = new Text(itr.nextToken());
               Text second = new Text(itr.nextToken());
               Text decade = new Text(itr.nextToken());
-              Text numberOfOccurrences = new Text(itr.nextToken());
+              Text occurrences = new Text(itr.nextToken());
               Text Cw1 = new Text(itr.nextToken());
-              Text dataToTransfer = new Text(numberOfOccurrences.toString() + " "+Cw1.toString());
+              Text olderData = new Text(occurrences.toString() + " "+Cw1.toString());
 
               //we reverse it! (For the sorting)
               Bigram bigram = new Bigram(second,first,decade);
-              Bigram bigramWithAsterisk = new Bigram(second,new Text("*"),decade);
+              Bigram bigramStar = new Bigram(second,new Text("*"),decade);
 
               //we also pass the data from the former map reduce
-              context.write(bigram,dataToTransfer);
-              context.write(bigramWithAsterisk,dataToTransfer); 
+              context.write(bigram,olderData);
+              context.write(bigramStar,olderData); 
         }
     }
 
@@ -73,32 +73,35 @@ public class ThirdMapReduce {
         public void reduce(Bigram key, Iterable<Text> values, Context context) throws IOException,  InterruptedException {
             if(!key.getFirst().equals(currentSecondWord)) {
                 currentSecondWord = key.getFirst();
-                secondWordCounter = 0;
-                long sum = 0;
-                for (Text value : values) {
-                    StringTokenizer itr = new StringTokenizer(value.toString());
-                    sum += Long.parseLong(itr.nextToken());
-                }
-                secondWordCounter += sum;
+                //secondWordCounter = 0;
+               // long sum = 0;
+                countValues(values);
+                //secondWordCounter += sum;
             } else {
                 if (key.getSecond().toString().equals("*")) {
-                    secondWordCounter = 0;
-                    long sum = 0;
-                    for (Text value : values) {
-                        StringTokenizer itr = new StringTokenizer(value.toString());
-                        sum += Long.parseLong(itr.nextToken());
-                    }
-                    secondWordCounter += sum;
+                    //secondWordCounter = 0;
+                    //long sum = 0;
+                    countValues(values);
+                    //secondWordCounter += sum;
                 } else {
-                    StringBuffer dataToTransfer = new StringBuffer("");
+                    StringBuffer olderData = new StringBuffer("");
                     for (Text value : values) {
-                        dataToTransfer.append(value.toString());
+                    	olderData.append(value.toString());
                     }
                     Text Cw2 = new Text(String.valueOf(secondWordCounter));
-                    context.write(new Bigram(key.getSecond(), key.getFirst(), key.getDecade()), new Text(dataToTransfer.toString() + " " + Cw2.toString()));
+                    context.write(new Bigram(key.getSecond(), key.getFirst(), key.getDecade()), new Text(olderData.toString() + " " + Cw2.toString()));
                 }
             }
     }
+
+		private void countValues(Iterable<Text> values) {
+			 secondWordCounter = 0;
+		    for (Text value : values) {
+                StringTokenizer iterator = new StringTokenizer(value.toString());
+                secondWordCounter += Long.parseLong(iterator.nextToken());
+            }
+			
+		}
 }
     
     public static void main(String[] args) throws Exception, ClassNotFoundException, InterruptedException  {

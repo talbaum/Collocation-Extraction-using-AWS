@@ -3,8 +3,7 @@ package com.amazonaws.samples;
 import org.apache.hadoop.io.Text;
 //TODO: all of this class
 public class BigramFinal extends Bigram  {
-
-
+	
 	public BigramFinal(Text first, Text second, Text decade,Text likehood ) {
 		super(first,second,decade,likehood);
 	}
@@ -22,26 +21,18 @@ public class BigramFinal extends Bigram  {
 		return first + " " + second + " " + decade + " " + " " + likehood;
 	}
 
+
+	private double inputCheck(Text txt) {
+		if(txt.toString().equals("") || txt.toString().equals("~") ||txt.toString().equals("NaN"))
+			return Integer.MIN_VALUE;
+		else
+			return 0;
+	}
+	
 	@Override
 	public int compareTo(Bigram other) {
-		double like1=0,like2=0;
-		if(likehood.toString().equals("") || likehood.toString().equals("~") ||likehood.toString().equals("NaN"))
-		{
-			like1=Integer.MIN_VALUE;
-		}
-		else {
-			like1=Double.parseDouble(likehood.toString());
-		}
-		if(other.getLikehood().toString().equals("") || other.getLikehood().toString().equals("~")||other.getLikehood().toString().equals("NaN"))
-		{
-			like2=Integer.MIN_VALUE;
-		}
-		else {
-			like2=Double.parseDouble(other.getLikehood().toString());
-		}
-		 
-		
-		
+		double like1=inputCheck(likehood);
+		double like2=inputCheck(other.getLikehood());	 		
 		if(decade.compareTo(other.getDecade()) > 0) {
 			return 1;
 		} else if(decade.compareTo(other.getDecade()) < 0) {
@@ -69,9 +60,6 @@ public class BigramFinal extends Bigram  {
 		}
 	}
 
-	private boolean isNan(Text likehood) {
-		return likehood.toString().equals("NaN");
-	}
 }
 
 

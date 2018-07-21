@@ -8,7 +8,7 @@ import com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClientBuild
 import com.amazonaws.services.elasticmapreduce.model.*;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 
-public class mainE {
+public class Main {
 	  private static final String FIRST_OUTPUT = "s3n://ass2talstas//first_output";
 	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//second_output";
 	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//third_output";
@@ -93,18 +93,7 @@ public class mainE {
 				.withName("FifthMapReduce")
 				.withHadoopJarStep(step5)
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
-		/*
-        step6
-		
-		HadoopJarStepConfig step6 = new HadoopJarStepConfig()
-				.withJar("s3://ass2talstas/step6.jar")
-				.withArgs("step6","null","s3n://assignment2dspmor//outputAssignment2");
-
-		StepConfig stepSix = new StepConfig()
-				.withName("step6")
-				.withHadoopJarStep(step6)
-				.withActionOnFailure("TERMINATE_JOB_FLOW");
-		 */
+	
 		JobFlowInstancesConfig instances = new JobFlowInstancesConfig()
 			    .withInstanceCount(2)
 			    .withMasterInstanceType(InstanceType.M3Xlarge.toString())
@@ -117,7 +106,7 @@ public class mainE {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepFive)
+				.withSteps(stepOne,stepTwo,stepThree,stepFour,stepFive)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")

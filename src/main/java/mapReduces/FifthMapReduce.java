@@ -12,21 +12,16 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.Partitioner;
 import java.io.IOException;
 import java.util.StringTokenizer;
+
+import com.amazonaws.samples.Bigram;
 import com.amazonaws.samples.BigramFinal;
 
-import mapReduces.FourthMapReduce.FourthMapReduceMapper;
-import mapReduces.FourthMapReduce.FourthMapReducePartitioner;
-import mapReduces.FourthMapReduce.FourthMapReduceReducer;
-
 public class FifthMapReduce {
-
-
 	//this map reduce calculates N
-
-	public FifthMapReduce() {}
+	//public FifthMapReduce() {}
 	//TODO: all of this class
 	public static class FifthMapReduceMapper extends Mapper<LongWritable, Text, BigramFinal, Text> {
-		public FifthMapReduceMapper() {}
+		//public FifthMapReduceMapper() {}
 
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
@@ -37,10 +32,10 @@ public class FifthMapReduce {
 			Text likehoodText = new Text(itr.nextToken());
 
 			BigramFinal bigram = new BigramFinal(first,second,decade,likehoodText); //likehood has to be here so it will be sorted
-			BigramFinal bigramByDecade = new BigramFinal(new Text("*"),new Text("*"),decade,new Text("~")); //wtf
+			BigramFinal decadeBigram = new BigramFinal(new Text("*"),new Text("*"),decade,new Text("~")); //wtf
 
 			context.write(bigram,likehoodText); //we write the data from the former map reduce
-			context.write(bigramByDecade,likehoodText);
+			context.write(decadeBigram,likehoodText);
 		}
 	}
 
@@ -56,8 +51,6 @@ public class FifthMapReduce {
 
 	public static class FifthMapReduceReducer extends Reducer<BigramFinal,Text,BigramFinal,Text> {
 		private double likehoodCounter;
-
-		//keep track of the incoming keys
 		private Text currentDecade;
 
 		protected void setup(@SuppressWarnings("rawtypes") Mapper.Context context) throws IOException, InterruptedException {
@@ -66,14 +59,13 @@ public class FifthMapReduce {
 		}
 
 		public Text getLike(Iterable<Text> values) {
-			StringBuffer dataToTransfer = new StringBuffer("");
-			for (Text value : values) {
-				dataToTransfer.append(value.toString());
-			}
-
-			StringTokenizer itr = new StringTokenizer(dataToTransfer.toString());
-			String i = itr.nextToken();
-			double likehood = Double.parseDouble(i);
+			StringBuffer olderData = new StringBuffer("");
+			for (Text value : values) 
+				olderData.append(value.toString());
+			
+			StringTokenizer dataIterator = new StringTokenizer(olderData.toString());
+			String likehoodStr = dataIterator.nextToken();
+			double likehood = Double.parseDouble(likehoodStr);
 			Text likehoodTxt = new Text(String.valueOf(likehood));	
 			return likehoodTxt;
 		}
@@ -85,13 +77,18 @@ public class FifthMapReduce {
 				likehoodCounter = 1;
 				Text likehoodTxt = getLike(values);	
 				context.write(new BigramFinal(key.getFirst(),key.getSecond(),key.getDecade()), likehoodTxt);
-			} else if(!(key.getFirst().toString().equals("*") && key.getSecond().toString().equals("*"))) {
+				} 
+			else if(!isBothWordStar(key)) {
 				Text likehoodTxt = getLike(values);
 				if(likehoodCounter<10) {	
 					context.write(new BigramFinal(key.getFirst(),key.getSecond(),key.getDecade()), likehoodTxt);
 					likehoodCounter++;
 				}
 			}
+		}
+		
+		private boolean isBothWordStar(Bigram key) {
+			return key.getFirst().toString().equals("*") && key.getSecond().toString().equals("*");
 		}
 	}
 
@@ -108,7 +105,6 @@ public class FifthMapReduce {
 		myJob.setMapOutputKeyClass(com.amazonaws.samples.BigramFinal.class);
 		myJob.setMapOutputValueClass(Text.class);
 		myJob.setPartitionerClass(FifthMapReducePartitioner.class);
-
 		TextInputFormat.addInputPath(myJob, new Path(args[1]));
 		String output=args[2];
 		TextOutputFormat.setOutputPath(myJob, new Path(output));
