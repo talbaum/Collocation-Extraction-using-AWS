@@ -14,33 +14,31 @@ public class Main {
 	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//third_output";
 	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//fourth_output";
 	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//final_output";
+	    
 	public static void main(String[]args){
 		
 		  AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
 				new EnvironmentVariableCredentialsProvider().getCredentials());	
-		
+	
 		/*
 		//EC2 RUN:
 		AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
                 new InstanceProfileCredentialsProvider(false).getCredentials());
 */
-		System.out.println("creating a emr");
+		System.out.println("Create the EMR...");
 		AmazonElasticMapReduce emr= AmazonElasticMapReduceClientBuilder.standard()
 				.withCredentials(credentials)
 				.withRegion("us-east-1")
 				.build();
 		 
-		System.out.println(emr.listClusters());
+		System.out.println("Clusters detail: " + emr.listClusters());
 		String lang=args[0];
 		String ngramLink;
 		if(lang.equals("eng"))
 			ngramLink="s3://ass2talstas/eng.corp.10k";
 		else
 			ngramLink= "s3://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/2gram/data";
-			 			
-		/*
-        step1
-		 */
+
 		HadoopJarStepConfig step1 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step1.jar")
 				.withArgs("FirstMapReduce",ngramLink,lang,FIRST_OUTPUT);
@@ -49,9 +47,7 @@ public class Main {
 				.withName("FirstMapReduce")
 				.withHadoopJarStep(step1)
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
-		/*
-        step2
-		 */
+
 		HadoopJarStepConfig step2 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step2.jar")
 				.withArgs("SecondMapReduce",FIRST_OUTPUT,SECOND_OUTPUT);
@@ -60,9 +56,7 @@ public class Main {
 				.withName("SecondMapReduce")
 				.withHadoopJarStep(step2)
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
-		/*
-        step3
-		 */
+	
 		HadoopJarStepConfig step3 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step3.jar")
 				.withArgs("ThirdMapReduce",SECOND_OUTPUT,THIRD_OUTPUT);
@@ -71,9 +65,7 @@ public class Main {
 				.withName("ThirdMapReduce")
 				.withHadoopJarStep(step3)
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
-		/*
-        step4
-		 */
+	
 		HadoopJarStepConfig step4 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step4.jar")
 				.withArgs("FourthMapReduce",THIRD_OUTPUT,FOURTH_OUTPUT);
@@ -82,9 +74,7 @@ public class Main {
 				.withName("FourthMapReduce")
 				.withHadoopJarStep(step4)
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
-		/*
-        step5
-		 */
+	
 		HadoopJarStepConfig step5 = new HadoopJarStepConfig()
 				.withJar("s3://ass2talstas/step5.jar")
 				.withArgs("FifthMapReduce",FOURTH_OUTPUT,FINAL_OUTPUT);
@@ -102,7 +92,6 @@ public class Main {
 			    .withKeepJobFlowAliveWhenNoSteps(false)
 				.withPlacement(new PlacementType("us-east-1a"));
 
-		System.out.println("give the cluster all our steps");
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
@@ -114,7 +103,7 @@ public class Main {
 				 
 		RunJobFlowResult result = emr.runJobFlow(request);
 		String id=result.getJobFlowId();
-		System.out.println("our cluster id: "+id);
+		System.out.println("The cluster id is: "+id);
 
 	}
 }
