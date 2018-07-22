@@ -43,7 +43,7 @@ public class Main {
 			ngramLink= "s3://ass2talstas/sample-7.txt";
 
 		HadoopJarStepConfig step1 = new HadoopJarStepConfig()
-				.withJar("s3://ass2talstas/step1111.jar")
+				.withJar("s3://ass2talstas/step111.jar")
 				.withArgs("FirstMapReduce",ngramLink,lang,FIRST_OUTPUT);
 
 		StepConfig stepOne = new StepConfig()
@@ -98,7 +98,7 @@ public class Main {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepFive)
+				.withSteps(stepOne)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")
