@@ -39,14 +39,14 @@ public class BigramFinal extends Bigram  {
 		} else if(decade.compareTo(other.getDecade()) < 0) {
 			return -1;
 		} else {
-			if(like1 > like2) {
+			if(like1 < like2) {
 				return 1;
-			} else if(like1 < like2) {
+			} else if(like1 > like2) {
 				return -1;
 			} else { 
-				if(likehood.compareTo(other.getLikehood())>0) {			
+				if(likehood.compareTo(other.getLikehood())<0) {			
 					return 1;
-				} else if(likehood.compareTo(other.getLikehood())<0) { 
+				} else if(likehood.compareTo(other.getLikehood())>0) { 
 					return -1;
 				}
 				else {if(first.compareTo(other.getFirst()) < 0) {

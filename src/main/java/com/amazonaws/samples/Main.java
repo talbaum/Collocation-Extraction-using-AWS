@@ -11,9 +11,9 @@ import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 public class Main {
 	  private static final String FIRST_OUTPUT = "s3n://ass2talstas//first_outputSTEP111";
 	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//second_outputSTEP111";
-	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//third_output";
-	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//fourth_output";
-	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//final_output";
+	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//third_outputSTEP111";
+	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//fourth_outputSTEP111";
+	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//final_outputSTEP111";
 	    
 	public static void main(String[]args){
 		
@@ -43,7 +43,7 @@ public class Main {
 			ngramLink= "s3://ass2talstas/sample-7.txt";
 
 		HadoopJarStepConfig step1 = new HadoopJarStepConfig()
-				.withJar("s3://ass2talstas/step1.jar")
+				.withJar("s3://ass2talstas/step1111.jar")
 				.withArgs("FirstMapReduce",ngramLink,lang,FIRST_OUTPUT);
 
 		StepConfig stepOne = new StepConfig()
@@ -98,7 +98,7 @@ public class Main {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepTwo)
+				.withSteps(stepFive)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")

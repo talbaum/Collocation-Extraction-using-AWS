@@ -74,7 +74,7 @@ public class FirstMapReduce {
 		}    
 
 		private static void writeToContext(Context context, StringTokenizer itr, Text first, Text second) throws NumberFormatException, IOException, InterruptedException {
-			Text year = new Text(itr.nextToken().substring(0, 3));
+			Text year = new Text(itr.nextToken());												
 			Text decade = getDecade(year);
 			Text occurrences = new Text(itr.nextToken());
 			Bigram bigram = new Bigram(first, second, decade);
@@ -83,8 +83,8 @@ public class FirstMapReduce {
 		
 		private static Text getDecade(Text yearStr) {
 			int yearInt=Integer.parseInt(yearStr.toString());
-			int decade= (yearInt / 10) * 10;
-			//int decade= yearInt - (yearInt %10);
+			//int decade= (yearInt / 10) * 10;
+			int decade= yearInt - (yearInt %10);
 			Text ans =new Text(String.valueOf(decade));
 			return ans;
 		}
