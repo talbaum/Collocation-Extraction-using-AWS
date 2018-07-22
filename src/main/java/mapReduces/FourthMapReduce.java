@@ -101,7 +101,8 @@ public class FourthMapReduce {
 			double third_element = log(L(C12,C1,p1));
 			double fourth_element = log(L((C2-C12),(N1-C1),p2));
 			double likehood = first_element+second_element-third_element-fourth_element;
-			return new Text(String.valueOf(likehood));
+			double minus2loglikehood= -2* likehood;
+			return new Text(String.valueOf(minus2loglikehood));
 		}
 
 		private double L(double k,double n,double x) {

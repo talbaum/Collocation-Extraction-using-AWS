@@ -80,7 +80,7 @@ public class FifthMapReduce {
 				} 
 			else if(!isBothWordStar(key)) {
 				Text likehoodTxt = getLike(values);
-				if(likehoodCounter<10) {	
+				if(likehoodCounter<100) {	
 					context.write(new BigramFinal(key.getFirst(),key.getSecond(),key.getDecade()), likehoodTxt);
 					likehoodCounter++;
 				}

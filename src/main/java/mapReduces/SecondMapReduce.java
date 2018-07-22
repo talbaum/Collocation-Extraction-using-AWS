@@ -25,15 +25,32 @@ public class SecondMapReduce {
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer valueIterator = new StringTokenizer(value.toString());
-			Text first = new Text(valueIterator.nextToken());
-			Text second = new Text(valueIterator.nextToken());
-			Text decade = new Text(valueIterator.nextToken());
-			Text textNumOccur = new Text(valueIterator.nextToken());
-			LongWritable occurrences = new LongWritable(Integer.parseInt(textNumOccur.toString()));
-			Bigram oldBigram = new Bigram(first,second,decade);
-			Bigram w1Bigram = new Bigram(first,new Text("*"),decade);
-			context.write(oldBigram,occurrences); //we write the data from the former map reduce
-			context.write(w1Bigram,occurrences);
+			System.out.println(valueIterator.countTokens() + " IS THE NUMBER OF TOKENS");
+			if (valueIterator.countTokens()==4) {
+				String tmp=valueIterator.nextToken();
+				System.out.print(tmp + " ");
+				Text first = new Text(tmp);
+				tmp=valueIterator.nextToken();
+				System.out.print(tmp + " ");
+				Text second = new Text(tmp);
+				tmp=valueIterator.nextToken();
+				System.out.print(tmp + " ");
+				Text decade = new Text(tmp);
+				tmp=valueIterator.nextToken();
+				System.out.println(tmp);
+				Text textNumOccur = new Text(tmp);
+				
+				LongWritable occurrences = new LongWritable(Integer.parseInt(textNumOccur.toString()));
+				Bigram oldBigram = new Bigram(first,second,decade);
+				Bigram w1Bigram = new Bigram(first,new Text("*"),decade);
+				context.write(oldBigram,occurrences); //we write the data from the former map reduce
+				context.write(w1Bigram,occurrences);
+			}
+			else {
+				while(valueIterator.hasMoreElements())
+					System.out.print(valueIterator.nextToken() +" ");
+				System.out.println("");
+			}
 		}
 	}
 

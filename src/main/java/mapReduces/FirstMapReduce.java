@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import org.apache.hadoop.mapreduce.Job;
 import com.amazonaws.samples.Bigram;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.conf.Configuration;
@@ -59,8 +60,8 @@ public class FirstMapReduce {
 		}
 		
 		private Text getTextWord(String str) {	
-			if (str.contains("_"))
-				str = str.substring(0, str.indexOf("_"));
+			//if (str.contains("_"))   step111.jar
+				//str = str.substring(0, str.indexOf("_"));
 			return new Text(str);
 		}
 
@@ -79,9 +80,11 @@ public class FirstMapReduce {
 			Bigram bigram = new Bigram(first, second, decade);
 			context.write(bigram, new LongWritable(Integer.parseInt(occurrences.toString())));
 		}
+		
 		private static Text getDecade(Text yearStr) {
 			int yearInt=Integer.parseInt(yearStr.toString());
 			int decade= (yearInt / 10) * 10;
+			//int decade= yearInt - (yearInt %10);
 			Text ans =new Text(String.valueOf(decade));
 			return ans;
 		}
@@ -111,6 +114,7 @@ public static void main(String[] args) throws Exception, ClassNotFoundException,
 	myJob.setOutputValueClass(LongWritable.class);
 	myJob.setOutputFormatClass(TextOutputFormat.class);
 	myJob.setInputFormatClass(SequenceFileInputFormat.class);
+	//myJob.setInputFormatClass(TextInputFormat.class); // When using encoded file, use SequenceInputFormat
 	myJob.setMapOutputKeyClass(com.amazonaws.samples.Bigram.class);
     myJob.setMapOutputValueClass(LongWritable.class);
 	SequenceFileInputFormat.addInputPath(myJob, new Path(args[1]));

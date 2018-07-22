@@ -32,18 +32,24 @@ public class BigramFinal extends Bigram  {
 	@Override
 	public int compareTo(Bigram other) {
 		double like1=inputCheck(likehood);
-		double like2=inputCheck(other.getLikehood());	 		
+		double like2=inputCheck(other.getLikehood());	
+		
 		if(decade.compareTo(other.getDecade()) > 0) {
 			return 1;
 		} else if(decade.compareTo(other.getDecade()) < 0) {
 			return -1;
 		} else {
-			if(like1 < like2) {
+			if(like1 > like2) {
 				return 1;
-			} else if(like1 > like2) {
+			} else if(like1 < like2) {
 				return -1;
-			} else {
-				if(first.compareTo(other.getFirst()) < 0) {
+			} else { 
+				if(likehood.compareTo(other.getLikehood())>0) {			
+					return 1;
+				} else if(likehood.compareTo(other.getLikehood())<0) { 
+					return -1;
+				}
+				else {if(first.compareTo(other.getFirst()) < 0) {
 					return 1;
 				} else if(first.compareTo(other.getFirst()) > 0) {
 					return -1;
@@ -57,6 +63,7 @@ public class BigramFinal extends Bigram  {
 					}
 				}
 			}
+		}
 		}
 	}
 
