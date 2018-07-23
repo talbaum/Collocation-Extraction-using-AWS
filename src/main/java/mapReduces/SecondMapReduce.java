@@ -99,7 +99,7 @@ public class SecondMapReduce {
 		Job myJob = new Job(conf, "step2");
 		myJob.setJarByClass(SecondMapReduce.class);
 		myJob.setMapperClass(SecondMapReduceMapper.class);
-		//myJob.setCombinerClass(SecondMapReduceReducer.class);
+		myJob.setCombinerClass(SecondMapReduceReducer.class);
 		myJob.setReducerClass(SecondMapReduceReducer.class);
 		myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class);
 		myJob.setOutputValueClass(IntWritable.class);

@@ -32,7 +32,7 @@ public class FifthMapReduce {
 			Text likehoodText = new Text(itr.nextToken());
 
 			BigramFinal bigram = new BigramFinal(first,second,decade,likehoodText); //likehood has to be here so it will be sorted
-			BigramFinal decadeBigram = new BigramFinal(new Text("*"),new Text("*"),decade,new Text("~")); //wtf
+			BigramFinal decadeBigram = new BigramFinal(new Text("*"),new Text("*"),decade,new Text("")); // was ~ at the last arg
 
 			context.write(bigram,likehoodText); //we write the data from the former map reduce
 			context.write(decadeBigram,likehoodText);
@@ -42,8 +42,8 @@ public class FifthMapReduce {
 	public static class FifthMapReducePartitioner extends Partitioner< BigramFinal, Text > {
 
 		@Override
-		public int getPartition(BigramFinal bigram, Text text, int numReduceTasks) {
-			return Integer.parseInt(bigram.getDecade().toString())%numReduceTasks;
+		public int getPartition(BigramFinal bigram, Text text, int numPartitions) {
+			return Integer.parseInt(bigram.getDecade().toString())%numPartitions;
 			//return Math.abs(bigram.hashCode()) % numPartitions;
 		}
 	}

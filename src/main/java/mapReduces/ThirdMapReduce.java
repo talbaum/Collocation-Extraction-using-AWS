@@ -3,13 +3,10 @@ package mapReduces;
 import org.apache.hadoop.mapreduce.Partitioner;
 import com.amazonaws.samples.Bigram;
 
-import mapReduces.SecondMapReduce.SecondMapReduceMapper;
-import mapReduces.SecondMapReduce.SecondMapReducePartitioner;
-import mapReduces.SecondMapReduce.SecondMapReduceReducer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
+
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -109,7 +106,7 @@ public class ThirdMapReduce {
     	Job myJob = new Job(conf, "step3");
     	myJob.setJarByClass(ThirdMapReduce.class);
     	myJob.setMapperClass(ThirdMapReduceMapper.class);
-    	//myJob.setCombinerClass(ThirdMapReduceReducer.class);
+    	myJob.setCombinerClass(ThirdMapReduceReducer.class);
     	myJob.setReducerClass(ThirdMapReduceReducer.class);
     	myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class);
     	myJob.setOutputValueClass(Text.class);

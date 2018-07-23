@@ -89,19 +89,32 @@ public class FourthMapReduce {
 
 		private Text calcTheEquation(StringBuffer data) {
 			StringTokenizer itr = new StringTokenizer(data.toString());
+			//STEP 44- WITHOUT PRINTS, STEP 4 - WITH PRINTS
 			double C12 = Double.parseDouble(itr.nextToken());
+			//System.out.print("c12: "+ C12 +" ");
 			double C1 = Double.parseDouble(itr.nextToken());
+			//System.out.print("c1 is "+ C1+" ");
 			double C2 = Double.parseDouble(itr.nextToken());
+			//System.out.print("c2 is "+ C2+" ");
 			double N1 = Double.parseDouble(String.valueOf(N));
+			//System.out.print("N1 is "+ N1+" ");
 			double p = C2/N1;
+			//System.out.print("p is "+ p+" ");
 			double p1 = C12/C1;
+			//System.out.print("p1 is "+ p1+" ");
 			double p2 = (C2-C12)/(N1-C1);
+			//System.out.print("p2 is "+ p2+" ");
 			double first_element = log(L(C12,C1,p));
+			//System.out.print("first_element is "+ first_element+" ");
 			double second_element = log(L((C2-C12),(N1-C1),p));
+			//System.out.print("second_element is "+ second_element+" ");
 			double third_element = log(L(C12,C1,p1));
+			//System.out.print("third_element is "+ third_element+" ");
 			double fourth_element = log(L((C2-C12),(N1-C1),p2));
-			double likehood = first_element+second_element-third_element-fourth_element;
+			//System.out.print("fourth_element is "+ fourth_element+" ");
+			double likehood = first_element+second_element-third_element-fourth_element;		
 			double minus2loglikehood= -2* likehood;
+			//System.out.println("minus2loglikehood is "+ minus2loglikehood);
 			return new Text(String.valueOf(minus2loglikehood));
 		}
 

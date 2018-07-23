@@ -44,9 +44,9 @@ public class BigramFinal extends Bigram  {
 			} else if(like1 > like2) {
 				return -1;
 			} else { 
-				if(likehood.compareTo(other.getLikehood())<0) {			
+				if(likehood.getLength()!=0 && other.getLikehood().getLength()!=0 && Double.parseDouble(likehood.toString()) < Double.parseDouble(other.getLikehood().toString())) { 		
 					return 1;
-				} else if(likehood.compareTo(other.getLikehood())>0) { 
+				} else if(likehood.getLength()!=0 && other.getLikehood().getLength()!=0 && Double.parseDouble(likehood.toString()) > Double.parseDouble(other.getLikehood().toString())) { 
 					return -1;
 				}
 				else {if(first.compareTo(other.getFirst()) < 0) {
