@@ -70,16 +70,10 @@ public class ThirdMapReduce {
         public void reduce(Bigram key, Iterable<Text> values, Context context) throws IOException,  InterruptedException {
             if(!key.getFirst().equals(currentSecondWord)) {
                 currentSecondWord = key.getFirst();
-                //secondWordCounter = 0;
-               // long sum = 0;
                 countValues(values);
-                //secondWordCounter += sum;
             } else {
                 if (key.getSecond().toString().equals("*")) {
-                    //secondWordCounter = 0;
-                    //long sum = 0;
                     countValues(values);
-                    //secondWordCounter += sum;
                 } else {
                     StringBuffer olderData = new StringBuffer("");
                     for (Text value : values) {

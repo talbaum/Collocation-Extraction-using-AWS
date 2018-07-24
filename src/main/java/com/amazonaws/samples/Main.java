@@ -9,11 +9,11 @@ import com.amazonaws.services.elasticmapreduce.model.*;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 
 public class Main {
-	  private static final String FIRST_OUTPUT = "s3n://ass2talstas//YesCombine//first_output";
-	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//YesCombine//second_output2";
-	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//YesCombine//third_output";
-	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//YesCombine//fourth_output";
-	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//YesCombine//final_output";
+	  private static final String FIRST_OUTPUT = "s3n://ass2talstas//NoCombine//first_output";
+	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//NoCombine//second_output";
+	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//NoCombine//third_output";
+	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//NoCombine//fourth_output";
+	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//NoCombine//final_output";
 	    
 	public static void main(String[]args){
 		
@@ -43,7 +43,7 @@ public class Main {
 			ngramLink= "s3://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/2gram/data";
 
 		HadoopJarStepConfig step1 = new HadoopJarStepConfig()
-				.withJar("s3://ass2talstas/step1.jar")
+				.withJar("s3://ass2talstas/step1NoCombine.jar")
 				.withArgs("FirstMapReduce",ngramLink,lang,FIRST_OUTPUT);
 
 		StepConfig stepOne = new StepConfig()
@@ -52,7 +52,7 @@ public class Main {
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
 
 		HadoopJarStepConfig step2 = new HadoopJarStepConfig()
-				.withJar("s3://ass2talstas/step2YesCombineTry2.jar")
+				.withJar("s3://ass2talstas/step2.jar")
 				.withArgs("SecondMapReduce",FIRST_OUTPUT,SECOND_OUTPUT);
 
 		StepConfig stepTwo = new StepConfig()
@@ -61,7 +61,7 @@ public class Main {
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
 	
 		HadoopJarStepConfig step3 = new HadoopJarStepConfig()
-				.withJar("s3://ass2talstas/step3YesCombine.jar")
+				.withJar("s3://ass2talstas/step3.jar")
 				.withArgs("ThirdMapReduce",SECOND_OUTPUT,THIRD_OUTPUT);
 
 		StepConfig stepThree = new StepConfig()
@@ -98,7 +98,7 @@ public class Main {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepFour)
+				.withSteps(stepOne,stepTwo,stepThree,stepFour,stepFive)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")

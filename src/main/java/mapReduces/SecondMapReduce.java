@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class SecondMapReduce {
-	//this map reduce is calculating C(w1)
+	//this map reduce is calculating C(w1)										
 	public static class SecondMapReduceMapper extends Mapper<LongWritable, Text, Bigram, Text> {
 		// public SecondMapReduceMapper() {}
 
@@ -40,37 +40,30 @@ public class SecondMapReduce {
 		}
 	}
 
-	
+	//this is the same as the reduce, now it gets bigram text and gives bigram text
 	public static class SecondMapReduceCombiner extends Reducer<Bigram,Text,Bigram,Text> {
-		private long firstWordCounter;
-		private Text currentFirstWord; //keep track of the incoming keys
+		//private long firstWordCounter;
+		//private Text currentFirstWord; //keep track of the incoming keys
 
 		protected void setup(@SuppressWarnings("rawtypes") Mapper.Context context) throws IOException, InterruptedException {
-			firstWordCounter = 0;
-			currentFirstWord = new Text("");
+			//firstWordCounter = 0;
+			//currentFirstWord = new Text("");
 		}
 		@Override
 		public void reduce(Bigram key, Iterable<Text> values, Context context) throws IOException,  InterruptedException {
-
-			if(!key.getFirst().equals(currentFirstWord)) {
-				currentFirstWord = key.getFirst();
-				countValues(values);
-			} else {
-				if (key.getSecond().toString().equals("*")) {
-					countValues(values);
-				} else {
+	
 					Text Cw1w2 = new Text(values.iterator().next().toString());
-					Text Cw1 = new Text(String.valueOf(firstWordCounter));
-					context.write(new Bigram(key.getFirst(), key.getSecond(), key.getDecade()), new Text(Cw1w2.toString() + " " + Cw1.toString()));
-				}
-			}
+					//Text Cw1 = new Text(String.valueOf(firstWordCounter));
+					context.write(new Bigram(key.getFirst(), key.getSecond(), key.getDecade()), new Text(Cw1w2.toString()));
+				
+			
 		}
-		private void countValues(Iterable<Text> values) {
+		/*private void countValues(Iterable<Text> values) {
 			firstWordCounter = 0;
 			for (Text value : values) {
 				firstWordCounter += Integer.parseInt(value.toString());
 			}
-		}
+		}*/
 	}
 	
 	public static class SecondMapReducePartitioner extends Partitioner< Bigram, Text  > {
@@ -109,13 +102,10 @@ public class SecondMapReduce {
 		private void countValues(Iterable<Text> values) {
 			firstWordCounter = 0;
 			for (Text value : values) {
-				String []strValues= value.toString().split(" ");
-				//for(String st: strValues) //try1
-				firstWordCounter += Integer.parseInt(strValues[1]);
-			}
+				firstWordCounter += Integer.parseInt(value.toString());
 		}
 	}
-
+}
 	public static void main(String[] args) throws Exception, ClassNotFoundException, InterruptedException  {
 		Configuration conf = new Configuration();
 		Job myJob = new Job(conf, "step2");
