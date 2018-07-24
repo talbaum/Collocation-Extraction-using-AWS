@@ -19,51 +19,29 @@ import java.util.StringTokenizer;
 
 public class SecondMapReduce {
 	//this map reduce is calculating C(w1)
-	public static class SecondMapReduceMapper extends Mapper<LongWritable, Text, Bigram, LongWritable> {
+	public static class SecondMapReduceMapper extends Mapper<LongWritable, Text, Bigram, Text> {
 		// public SecondMapReduceMapper() {}
 
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer valueIterator = new StringTokenizer(value.toString());
-			System.out.println(valueIterator.countTokens() + " IS THE NUMBER OF TOKENS");
 			if (valueIterator.countTokens()==4) {
-				String tmp=valueIterator.nextToken();
-				System.out.print(tmp + " ");
-				Text first = new Text(tmp);
-				tmp=valueIterator.nextToken();
-				System.out.print(tmp + " ");
-				Text second = new Text(tmp);
-				tmp=valueIterator.nextToken();
-				System.out.print(tmp + " ");
-				Text decade = new Text(tmp);
-				tmp=valueIterator.nextToken();
-				System.out.println(tmp);
-				Text textNumOccur = new Text(tmp);
+				Text first = new Text(valueIterator.nextToken());
+				Text second = new Text(valueIterator.nextToken());
+				Text decade = new Text(valueIterator.nextToken());
+				Text textNumOccur = new Text(valueIterator.nextToken());
 				
-				LongWritable occurrences = new LongWritable(Integer.parseInt(textNumOccur.toString()));
+				//LongWritable occurrences = new LongWritable(Integer.parseInt(textNumOccur.toString()));
 				Bigram oldBigram = new Bigram(first,second,decade);
 				Bigram w1Bigram = new Bigram(first,new Text("*"),decade);
-				context.write(oldBigram,occurrences); //we write the data from the former map reduce
-				context.write(w1Bigram,occurrences);
-			}
-			else {
-				while(valueIterator.hasMoreElements())
-					System.out.print(valueIterator.nextToken() +" ");
-				System.out.println("");
+				context.write(oldBigram,textNumOccur); //we write the data from the former map reduce
+				context.write(w1Bigram,textNumOccur);
 			}
 		}
 	}
 
-	public static class SecondMapReducePartitioner extends Partitioner< Bigram, LongWritable > {
-
-		@Override
-		public int getPartition(Bigram bigram, LongWritable intWritable, int numReduceTasks) {
-			return Integer.parseInt(bigram.getDecade().toString())%numReduceTasks;
-			//return Math.abs(bigram.hashCode()) % numPartitions;
-		}
-	}
-
-	public static class SecondMapReduceReducer extends Reducer<Bigram,LongWritable,Bigram,Text> {
+	
+	public static class SecondMapReduceCombiner extends Reducer<Bigram,Text,Bigram,Text> {
 		private long firstWordCounter;
 		private Text currentFirstWord; //keep track of the incoming keys
 
@@ -72,7 +50,8 @@ public class SecondMapReduce {
 			currentFirstWord = new Text("");
 		}
 		@Override
-		public void reduce(Bigram key, Iterable<LongWritable> values, Context context) throws IOException,  InterruptedException {
+		public void reduce(Bigram key, Iterable<Text> values, Context context) throws IOException,  InterruptedException {
+
 			if(!key.getFirst().equals(currentFirstWord)) {
 				currentFirstWord = key.getFirst();
 				countValues(values);
@@ -86,10 +65,53 @@ public class SecondMapReduce {
 				}
 			}
 		}
-		private void countValues(Iterable<LongWritable> values) {
+		private void countValues(Iterable<Text> values) {
 			firstWordCounter = 0;
-			for (LongWritable value : values) {
-				firstWordCounter += value.get();
+			for (Text value : values) {
+				firstWordCounter += Integer.parseInt(value.toString());
+			}
+		}
+	}
+	
+	public static class SecondMapReducePartitioner extends Partitioner< Bigram, Text  > {
+
+		@Override
+		public int getPartition(Bigram bigram, Text  txt, int numReduceTasks) {
+			return Integer.parseInt(bigram.getDecade().toString())%numReduceTasks;
+			//return Math.abs(bigram.hashCode()) % numPartitions;
+		}
+
+	}
+	public static class SecondMapReduceReducer extends Reducer<Bigram,Text,Bigram,Text> {
+		private long firstWordCounter;
+		private Text currentFirstWord; //keep track of the incoming keys
+
+		protected void setup(@SuppressWarnings("rawtypes") Mapper.Context context) throws IOException, InterruptedException {
+			firstWordCounter = 0;
+			currentFirstWord = new Text("");
+		}
+		@Override
+		public void reduce(Bigram key, Iterable<Text> values, Context context) throws IOException,  InterruptedException {
+	
+			if(!key.getFirst().equals(currentFirstWord)) {
+				currentFirstWord = key.getFirst();
+				countValues(values);
+			} else {
+				if (key.getSecond().toString().equals("*")) {
+					countValues(values);
+				} else {
+					Text Cw1w2 = new Text(values.iterator().next().toString());
+					Text Cw1 = new Text(String.valueOf(firstWordCounter));
+					context.write(new Bigram(key.getFirst(), key.getSecond(), key.getDecade()), new Text(Cw1w2.toString() + " " + Cw1.toString()));
+				}
+			}
+		}
+		private void countValues(Iterable<Text> values) {
+			firstWordCounter = 0;
+			for (Text value : values) {
+				String []strValues= value.toString().split(" ");
+				//for(String st: strValues) //try1
+				firstWordCounter += Integer.parseInt(strValues[1]);
 			}
 		}
 	}
@@ -99,13 +121,13 @@ public class SecondMapReduce {
 		Job myJob = new Job(conf, "step2");
 		myJob.setJarByClass(SecondMapReduce.class);
 		myJob.setMapperClass(SecondMapReduceMapper.class);
-		myJob.setCombinerClass(SecondMapReduceReducer.class);
+		myJob.setCombinerClass(SecondMapReduceCombiner.class);
 		myJob.setReducerClass(SecondMapReduceReducer.class);
 		myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class);
-		myJob.setOutputValueClass(IntWritable.class);
+		myJob.setOutputValueClass(Text.class);
 		//myJob.setOutputFormatClass(TextOutputFormat.class);
 		myJob.setMapOutputKeyClass(com.amazonaws.samples.Bigram.class);
-		myJob.setMapOutputValueClass(LongWritable.class);
+		myJob.setMapOutputValueClass(Text.class);
 		myJob.setPartitionerClass(SecondMapReducePartitioner.class);
 		TextInputFormat.addInputPath(myJob, new Path(args[1]));
 		String output=args[2];

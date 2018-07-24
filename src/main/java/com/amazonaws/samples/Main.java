@@ -10,7 +10,7 @@ import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 
 public class Main {
 	  private static final String FIRST_OUTPUT = "s3n://ass2talstas//YesCombine//first_output";
-	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//YesCombine//second_output";
+	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//YesCombine//second_output2";
 	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//YesCombine//third_output";
 	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//YesCombine//fourth_output";
 	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//YesCombine//final_output";
@@ -52,7 +52,7 @@ public class Main {
 				.withActionOnFailure("TERMINATE_JOB_FLOW");
 
 		HadoopJarStepConfig step2 = new HadoopJarStepConfig()
-				.withJar("s3://ass2talstas/step2YesCombine.jar")
+				.withJar("s3://ass2talstas/step2YesCombineTry2.jar")
 				.withArgs("SecondMapReduce",FIRST_OUTPUT,SECOND_OUTPUT);
 
 		StepConfig stepTwo = new StepConfig()
@@ -98,7 +98,7 @@ public class Main {
 		RunJobFlowRequest request = new RunJobFlowRequest()
 				.withName("ass2")                                   
 				.withInstances(instances)
-				.withSteps(stepOne,stepTwo,stepThree,stepFour,stepFive)
+				.withSteps(stepFour)
 				.withLogUri("s3n://ass2talstas/logs/")
 				.withServiceRole("EMR_DefaultRole")
 				.withJobFlowRole("EMR_EC2_DefaultRole")
