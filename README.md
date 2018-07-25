@@ -1,5 +1,5 @@
 # Collocation-Extraction-using-AWS
-In this project we have implemneted a real-world application that automatically
+In this project we have implemented  emneted a real-world application that automatically
 extract collocations from the Google 2-grams dataset using Amazon Elastic Map Reduce.
 
 ## Team
@@ -17,9 +17,9 @@ step1.jar , step2.jar, step3.jar, step4.jar, step5.jar.
 
 ## How to run the project:
 
-Now, we need to run this line in the terminal with the desired langauge( lang can be either eng or heb)
+Now, we need to run this line in the terminal with the desired language( lang can be either eng or heb).  Get into the directory containing the main jar and run this command:
 ```
-java -jar ExtractCollations lang ##CHECK THIS
+java -jar ExtractCollations.jar lang
 ```
 ## How the program works:
 We will explain each step functionality at the map reduce system.
