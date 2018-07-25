@@ -37,7 +37,7 @@ public class FifthMapReduce {
 		@Override
 		public int getPartition(BigramFinal bigram, Text text, int numPartitions) {
 			return Integer.parseInt(bigram.getDecade().toString())%numPartitions;
-			//return Math.abs(bigram.hashCode()) % numPartitions;
+			
 		}
 	}
 

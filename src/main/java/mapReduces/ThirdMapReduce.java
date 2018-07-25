@@ -47,7 +47,7 @@ public class ThirdMapReduce {
     	@Override
         public int getPartition(Bigram bigram, Text text, int numReduceTasks) {
                         return Integer.parseInt(bigram.getDecade().toString())%numReduceTasks;
-                    	//return Math.abs(bigram.hashCode()) % numPartitions;
+                    	
                    }
         }
 

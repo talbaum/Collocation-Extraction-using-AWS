@@ -50,7 +50,6 @@ public class SecondMapReduce {
 		@Override
 		public int getPartition(Bigram bigram, Text  txt, int numReduceTasks) {
 			return Integer.parseInt(bigram.getDecade().toString())%numReduceTasks;
-			//return Math.abs(bigram.hashCode()) % numPartitions;
 		}
 
 	}
