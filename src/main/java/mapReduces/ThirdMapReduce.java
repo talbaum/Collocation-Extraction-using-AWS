@@ -21,13 +21,7 @@ import java.lang.StringBuffer;
 //this map reduce is calculating c(W2)
 
 public class ThirdMapReduce {
-	//TODO: all of this class
-    //public ThirdMapReduce() {}
-
     public static class ThirdMapReduceMapper extends Mapper<LongWritable, Text, Bigram, Text> {
-
-        //public ThirdMapReduceMapper() {}
-
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         	  StringTokenizer itr = new StringTokenizer(value.toString());
@@ -59,7 +53,7 @@ public class ThirdMapReduce {
 
     public static class ThirdMapReduceReducer extends Reducer<Bigram,Text,Bigram,Text> {
     	private long secondWordCounter;
-        private Text currentSecondWord;  //keep track of the incoming keys
+        private Text currentSecondWord;  
 
         protected void setup(@SuppressWarnings("rawtypes") Mapper.Context context) throws IOException, InterruptedException {
             secondWordCounter = 0;
@@ -100,15 +94,13 @@ public class ThirdMapReduce {
     	Job myJob = new Job(conf, "step3");
     	myJob.setJarByClass(ThirdMapReduce.class);
     	myJob.setMapperClass(ThirdMapReduceMapper.class);
-    	myJob.setCombinerClass(ThirdMapReduceReducer.class);
+    	//myJob.setCombinerClass(ThirdMapReduceReducer.class);
     	myJob.setReducerClass(ThirdMapReduceReducer.class);
     	myJob.setOutputKeyClass(com.amazonaws.samples.Bigram.class);
     	myJob.setOutputValueClass(Text.class);
-    	//myJob.setOutputFormatClass(TextOutputFormat.class);
     	myJob.setMapOutputKeyClass(com.amazonaws.samples.Bigram.class);
     	myJob.setMapOutputValueClass(Text.class);
     	myJob.setPartitionerClass(ThirdMapReducePartitioner.class);
-
     	TextInputFormat.addInputPath(myJob, new Path(args[1]));
     	String output=args[2];
     	TextOutputFormat.setOutputPath(myJob, new Path(output));

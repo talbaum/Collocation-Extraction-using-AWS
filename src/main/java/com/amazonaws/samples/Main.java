@@ -6,12 +6,12 @@ import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduce;
 import com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClientBuilder;
 import com.amazonaws.services.elasticmapreduce.model.*;
-import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+
 
 public class Main {
 	  private static final String FIRST_OUTPUT = "s3n://ass2talstas//NoCombine//first_output";
 	    private static final String SECOND_OUTPUT = "s3n://ass2talstas//NoCombine//second_output";
-	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//NoCombine//third_output";
+	    private static final String THIRD_OUTPUT = "s3n://ass2talstas//NoCombine//third_output2";
 	    private static final String FOURTH_OUTPUT = "s3n://ass2talstas//NoCombine//fourth_output";
 	    public static final String FINAL_OUTPUT = "s3n://ass2talstas//NoCombine//final_output";
 	    
@@ -20,11 +20,6 @@ public class Main {
 		  AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
 				new EnvironmentVariableCredentialsProvider().getCredentials());	
 	
-		/*
-		//EC2 RUN:
-		AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(
-                new InstanceProfileCredentialsProvider(false).getCredentials());
-*/
 		System.out.println("Create the EMR...");
 		AmazonElasticMapReduce emr= AmazonElasticMapReduceClientBuilder.standard()
 				.withCredentials(credentials)
@@ -35,9 +30,6 @@ public class Main {
 		String lang=args[0];
 		String ngramLink;
 		if(lang.equals("eng"))
-			//ngramLink="s3://ass2talstas/sample-7.txt";
-			//ngramLink="s3://ass2talstas/googlebooks-eng-all-2gram-20120701-aa";
-			//ngramLink="s3://ass2talstas/eng.corp.10k";
 			ngramLink="s3://datasets.elasticmapreduce/ngrams/books/20090715/eng-us-all/2gram/data";
 		else
 			ngramLink= "s3://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/2gram/data";

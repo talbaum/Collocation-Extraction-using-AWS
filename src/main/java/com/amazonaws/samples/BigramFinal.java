@@ -1,7 +1,6 @@
 package com.amazonaws.samples;
-
 import org.apache.hadoop.io.Text;
-//TODO: all of this class
+
 public class BigramFinal extends Bigram  {
 	
 	public BigramFinal(Text first, Text second, Text decade,Text likehood ) {

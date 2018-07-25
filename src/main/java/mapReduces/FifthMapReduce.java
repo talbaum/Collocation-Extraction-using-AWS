@@ -1,5 +1,4 @@
 package mapReduces;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -12,17 +11,11 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.Partitioner;
 import java.io.IOException;
 import java.util.StringTokenizer;
-
 import com.amazonaws.samples.Bigram;
 import com.amazonaws.samples.BigramFinal;
 
 public class FifthMapReduce {
-	//this map reduce calculates N
-	//public FifthMapReduce() {}
-	//TODO: all of this class
 	public static class FifthMapReduceMapper extends Mapper<LongWritable, Text, BigramFinal, Text> {
-		//public FifthMapReduceMapper() {}
-
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString());
@@ -32,7 +25,7 @@ public class FifthMapReduce {
 			Text likehoodText = new Text(itr.nextToken());
 
 			BigramFinal bigram = new BigramFinal(first,second,decade,likehoodText); //likehood has to be here so it will be sorted
-			BigramFinal decadeBigram = new BigramFinal(new Text("*"),new Text("*"),decade,new Text("")); // was ~ at the last arg
+			BigramFinal decadeBigram = new BigramFinal(new Text("*"),new Text("*"),decade,new Text("")); 
 
 			context.write(bigram,likehoodText); //we write the data from the former map reduce
 			context.write(decadeBigram,likehoodText);
@@ -101,7 +94,6 @@ public class FifthMapReduce {
 		myJob.setReducerClass(FifthMapReduceReducer.class);
 		myJob.setOutputKeyClass(com.amazonaws.samples.BigramFinal.class);
 		myJob.setOutputValueClass(Text.class);
-		//myJob.setOutputFormatClass(TextOutputFormat.class);
 		myJob.setMapOutputKeyClass(com.amazonaws.samples.BigramFinal.class);
 		myJob.setMapOutputValueClass(Text.class);
 		myJob.setPartitionerClass(FifthMapReducePartitioner.class);
