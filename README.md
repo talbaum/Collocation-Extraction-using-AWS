@@ -14,6 +14,7 @@ Stas Radchenko - radchens - 319516985
 There are a few steps we have to follow in order to run the application smoothly.
 First ,we have to upload the following jar files to our bucket:
 step1.jar , step2.jar, step3.jar, step4.jar, step5.jar.
+Then we need to make sure to have the main class jar : ExtractCollations.jar.
 
 ## How to run the project:
 
