@@ -1,5 +1,5 @@
 # Collocation-Extraction-using-AWS
-In this project we have implemented  emneted a real-world application that automatically
+In this project we have implemented a real-world application that automatically
 extract collocations from the Google 2-grams dataset using Amazon Elastic Map Reduce.
 
 ## Team
